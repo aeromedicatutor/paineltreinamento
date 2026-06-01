@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Implantação e Treinamento</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #E8590C;
+    --orange-light: #F47735;
+    --orange-pale: #FFF0E8;
+    --green: #1A4731;
+    --green-mid: #226040;
+    --green-light: #2D7A52;
+    --green-pale: #E8F5EE;
+    --white: #FFFFFF;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-400: #9CA3AF;
+    --gray-600: #4B5563;
+    --gray-800: #1F2937;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.06);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-mid) 60%, var(--green-light) 100%);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(26,71,49,0.3);
+  }
+
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-mark {
+    width: 40px;
+    height: 40px;
+    background: var(--orange);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo-mark svg { width: 22px; height: 22px; fill: white; }
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .header-date {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 400;
+  }
+
+  /* HERO BANNER */
+  .hero {
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-mid) 100%);
+    padding: 48px 32px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 300px;
+    height: 300px;
+    background: var(--orange);
+    opacity: 0.07;
+    border-radius: 50%;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: 30%;
+    width: 200px;
+    height: 200px;
+    background: white;
+    opacity: 0.04;
+    border-radius: 50%;
+  }
+
+  .hero-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--orange-light);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .hero-title {
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 800;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.65);
+    max-width: 600px;
+    line-height: 1.6;
+  }
+
+  /* KPI CARDS */
+  .kpi-strip {
+    max-width: 1400px;
+    margin: -36px auto 0;
+    padding: 0 32px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .kpi-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: default;
+    border-top: 3px solid transparent;
+  }
+
+  .kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.12);
+  }
+
+  .kpi-card.total { border-top-color: var(--green); }
+  .kpi-card.treinado { border-top-color: var(--green-light); }
+  .kpi-card.pendente { border-top-color: var(--orange); }
+  .kpi-card.agendado { border-top-color: #F59E0B; }
+
+  .kpi-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .kpi-card.total .kpi-icon { background: var(--green-pale); }
+  .kpi-card.treinado .kpi-icon { background: #E8F5EE; }
+  .kpi-card.pendente .kpi-icon { background: var(--orange-pale); }
+  .kpi-card.agendado .kpi-icon { background: #FEF3C7; }
+
+  .kpi-icon svg { width: 24px; height: 24px; }
+  .kpi-card.total .kpi-icon svg { stroke: var(--green); }
+  .kpi-card.treinado .kpi-icon svg { stroke: var(--green-light); }
+  .kpi-card.pendente .kpi-icon svg { stroke: var(--orange); }
+  .kpi-card.agendado .kpi-icon svg { stroke: #D97706; }
+
+  .kpi-info { flex: 1; min-width: 0; }
+  .kpi-number { font-size: 32px; font-weight: 800; line-height: 1; margin-bottom: 3px; }
+  .kpi-card.total .kpi-number { color: var(--green); }
+  .kpi-card.treinado .kpi-number { color: var(--green-light); }
+  .kpi-card.pendente .kpi-number { color: var(--orange); }
+  .kpi-card.agendado .kpi-number { color: #D97706; }
+
+  .kpi-label { font-size: 12px; font-weight: 500; color: var(--gray-600); }
+  .kpi-pct { font-size: 11px; font-weight: 600; color: var(--gray-400); margin-top: 2px; }
+
+  /* MAIN CONTENT */
+  .main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 32px 60px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-block {
+    background: white;
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+
+  .progress-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-800);
+  }
+
+  .progress-pct {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--green);
+  }
+
+  .progress-bar-wrap {
+    background: var(--gray-100);
+    border-radius: 100px;
+    height: 10px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--green) 0%, var(--green-light) 100%);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .progress-legend {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--gray-600);
+    font-weight: 500;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* FILTERS & SEARCH */
+  .controls {
+    background: white;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .search-wrap {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--gray-400);
+    pointer-events: none;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    padding: 10px 14px 10px 40px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: var(--gray-800);
+    outline: none;
+    transition: border-color 0.2s;
+    background: var(--gray-50);
+  }
+
+  .search-wrap input:focus { border-color: var(--green); background: white; }
+  .search-wrap input::placeholder { color: var(--gray-400); }
+
+  .filter-btns {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 9px 18px;
+    border-radius: 100px;
+    border: 1.5px solid var(--gray-200);
+    background: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover { border-color: var(--green); color: var(--green); }
+  .filter-btn.active { background: var(--green); border-color: var(--green); color: white; }
+  .filter-btn.active.orange { background: var(--orange); border-color: var(--orange); }
+  .filter-btn.active.amber { background: #D97706; border-color: #D97706; }
+
+  .results-count {
+    font-size: 12px;
+    color: var(--gray-400);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* TABLE */
+  .table-wrap {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+  }
+
+  .table-header-bar {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .table-header-bar h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-800);
+  }
+
+  .export-btn {
+    padding: 8px 16px;
+    background: var(--green-pale);
+    border: 1.5px solid var(--green-light);
+    border-radius: var(--radius-sm);
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--green);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .export-btn:hover { background: var(--green); color: white; }
+
+  .table-scroll { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead tr {
+    background: var(--gray-50);
+    border-bottom: 2px solid var(--gray-200);
+  }
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gray-600);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s;
+  }
+
+  th:hover { color: var(--green); }
+
+  th .sort-icon { display: inline-block; margin-left: 4px; opacity: 0.4; font-size: 10px; }
+  th.sort-asc .sort-icon, th.sort-desc .sort-icon { opacity: 1; color: var(--green); }
+
+  tbody tr {
+    border-bottom: 1px solid var(--gray-100);
+    transition: background 0.15s;
+  }
+
+  tbody tr:hover { background: var(--gray-50); }
+  tbody tr:last-child { border-bottom: none; }
+
+  td {
+    padding: 13px 16px;
+    vertical-align: middle;
+    color: var(--gray-800);
+  }
+
+  .td-fornecedor {
+    font-weight: 600;
+    font-size: 13px;
+    max-width: 280px;
+    line-height: 1.3;
+  }
+
+  .td-fornecedor small {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--gray-400);
+    margin-top: 2px;
+  }
+
+  /* STATUS BADGES */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 11px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  .badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+
+  .badge-treinado { background: #E8F5EE; color: #166534; }
+  .badge-treinado::before { background: #22C55E; }
+
+  .badge-pendente { background: var(--orange-pale); color: #9A3412; }
+  .badge-pendente::before { background: var(--orange); }
+
+  .badge-agendado { background: #FEF3C7; color: #92400E; }
+  .badge-agendado::before { background: #F59E0B; }
+
+  .td-date {
+    font-size: 12px;
+    color: var(--gray-600);
+    white-space: nowrap;
+  }
+
+  .td-date.empty { color: var(--gray-400); font-style: italic; }
+
+  .check-yes {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #166534;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .check-no {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--gray-400);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .tag-info {
+    font-size: 11px;
+    background: var(--gray-100);
+    color: var(--gray-600);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .badge-util {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 11px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .badge-util.app  { background: #E8F5EE; color: #166534; }
+  .badge-util.web  { background: #EFF6FF; color: #1E40AF; }
+  .badge-util.nao  { background: var(--gray-100); color: var(--gray-500); }
+  .badge-util.vazio { color: var(--gray-400); font-size: 13px; }
+  .motivo-tag {
+    font-size: 10px;
+    color: var(--gray-500);
+    font-weight: 500;
+    font-style: italic;
+    margin-top: 3px;
+    display: inline-block;
+  }
+  .empty-state {
+    padding: 60px 24px;
+    text-align: center;
+    color: var(--gray-400);
+  }
+
+  .empty-state svg { width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.5; }
+  .empty-state p { font-size: 14px; font-weight: 500; }
+
+  /* FOOTER */
+  footer {
+    background: var(--green);
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 20px 32px;
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  footer strong { color: white; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+    .hero { padding: 36px 20px 50px; }
+    .main { padding: 30px 16px 40px; }
+    .kpi-strip { padding: 0 16px; }
+    .header-inner { padding: 0 16px; }
+  }
+
+  @media (max-width: 600px) {
+    .kpi-strip { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .kpi-card { padding: 16px; }
+    .kpi-number { font-size: 26px; }
+  }
+
+  /* ANIMATION */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .kpi-card { animation: fadeInUp 0.4s ease both; }
+  .kpi-card:nth-child(1) { animation-delay: 0.05s; }
+  .kpi-card:nth-child(2) { animation-delay: 0.10s; }
+  .kpi-card:nth-child(3) { animation-delay: 0.15s; }
+  .kpi-card:nth-child(4) { animation-delay: 0.20s; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-title">Painel de Implantação</span>
+        <span class="logo-sub">Treinamento de Fornecedores</span>
+      </div>
+    </div>
+    <span class="header-date" id="headerDate"></span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Visão Geral</div>
+    <h1 class="hero-title">Status de Treinamento<br>de Fornecedores</h1>
+    <p class="hero-sub">Acompanhe em tempo real o progresso de implantação e treinamento de todos os fornecedores cadastrados na plataforma.</p>
+  </div>
+</div>
+
+<div class="kpi-strip">
+  <div class="kpi-card total">
+    <div class="kpi-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    </div>
+    <div class="kpi-info">
+      <div class="kpi-number" id="kpiTotal">0</div>
+      <div class="kpi-label">Total de Fornecedores</div>
+    </div>
+  </div>
+  <div class="kpi-card treinado">
+    <div class="kpi-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 11 12 14 22 4"/>
+        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+      </svg>
+    </div>
+    <div class="kpi-info">
+      <div class="kpi-number" id="kpiTreinado">0</div>
+      <div class="kpi-label">Treinados</div>
+      <div class="kpi-pct" id="kpiTreinadoPct"></div>
+    </div>
+  </div>
+  <div class="kpi-card pendente">
+    <div class="kpi-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+    </div>
+    <div class="kpi-info">
+      <div class="kpi-number" id="kpiPendente">0</div>
+      <div class="kpi-label">Pendentes</div>
+      <div class="kpi-pct" id="kpiPendentePct"></div>
+    </div>
+  </div>
+  <div class="kpi-card agendado">
+    <div class="kpi-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+        <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        <line x1="8" y1="14" x2="8" y2="14" stroke-width="3"/><line x1="12" y1="14" x2="12" y2="14" stroke-width="3"/>
+        <line x1="16" y1="14" x2="16" y2="14" stroke-width="3"/>
+      </svg>
+    </div>
+    <div class="kpi-info">
+      <div class="kpi-number" id="kpiAgendado">0</div>
+      <div class="kpi-label">Agendados</div>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+
+  <div class="progress-block">
+    <div class="progress-header">
+      <span class="progress-title">Progresso Geral de Treinamento</span>
+      <span class="progress-pct" id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+    </div>
+    <div class="progress-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green-light)"></div> Treinados</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div> Pendentes</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#F59E0B"></div> Agendados</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Buscar fornecedor...">
+    </div>
+    <div class="filter-btns">
+      <button class="filter-btn active" data-filter="todos" onclick="setFilter('todos', this)">Todos</button>
+      <button class="filter-btn" data-filter="Treinado" onclick="setFilter('Treinado', this)">Treinados</button>
+      <button class="filter-btn" data-filter="Pendente" onclick="setFilter('Pendente', this)">Pendentes</button>
+      <button class="filter-btn" data-filter="Agendado" onclick="setFilter('Agendado', this)">Agendados</button>
+    </div>
+    <span class="results-count" id="resultsCount"></span>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-header-bar">
+      <h2>Lista de Fornecedores</h2>
+      <button class="export-btn" onclick="exportCSV()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Exportar CSV
+      </button>
+    </div>
+    <div class="table-scroll">
+      <table id="mainTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('fornecedor')">Fornecedor <span class="sort-icon">&#9650;</span></th>
+            <th onclick="sortTable('status')">Status <span class="sort-icon">&#9650;</span></th>
+            <th onclick="sortTable('dt_treinamento')">Data Treinamento <span class="sort-icon">&#9650;</span></th>
+            <th onclick="sortTable('utilizando')">Utilização <span class="sort-icon">&#9650;</span></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div class="empty-state" id="emptyState" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <p>Nenhum fornecedor encontrado para os filtros aplicados.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Painel de Implantação e Treinamento &mdash; <strong>Atualizado automaticamente via JSON/CSV</strong> &mdash; Para editar os dados, acesse a <strong><a href="admin.html" style="color:var(--orange-light);text-decoration:none;">Página Admin</a></strong>
+</footer>
+
+<script>
+// ===== DATA =====
+let DATA = JSON.parse(localStorage.getItem('fornecedores_data') || 'null');
+
+if (!DATA) {
+  DATA = [{"fornecedor":"3 G REMOÇOES COMERCIO E SERVIÇOS","status":"Treinado","dt_agendamento":"","dt_treinamento":"21/01/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Em Instalação","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Janeiro","ano_treinamento":"2026","dias_desde_treinamento":"131"},{"fornecedor":"A & G Serviços Médicos LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"A + Emergências Médicas EIRELI","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"A. Delgado Soluções LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"AC Transporte de Pacientes LTDA","status":"Treinado","dt_agendamento":"17/04/2026","dt_treinamento":"17/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Em Instalação","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"45"},{"fornecedor":"Acura - Soluções em Saúde","status":"Treinado","dt_agendamento":"08/09/2025","dt_treinamento":"26/05/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"2","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Maio","ano_treinamento":"2026","dias_desde_treinamento":"6"},{"fornecedor":"Alicia Remoções","status":"Treinado","dt_agendamento":"16/04/2026","dt_treinamento":"16/04/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"46"},{"fornecedor":"AMAZON RESGATE","status":"Treinado","dt_agendamento":"23/04/2026","dt_treinamento":"23/04/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"9","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"39"},{"fornecedor":"Ambulância Saúde -  VJ MENDES","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"AMC - Advanced Medical Care Serviços em Saúde LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"AME EMERGENCIAS MEDICAS LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"America Remoçoes","status":"Treinado","dt_agendamento":"22/10/2025","dt_treinamento":"22/10/2025","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Sem Dispositivo","tem_sistema":"Não","qual_sistema":"","celular":"Não","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Outubro","ano_treinamento":"2025","dias_desde_treinamento":"222"},{"fornecedor":"Amo Vida","status":"Treinado","dt_agendamento":"12/11/2025","dt_treinamento":"12/11/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Novembro","ano_treinamento":"2025","dias_desde_treinamento":"201"},{"fornecedor":"Anilmed","status":"Treinado","dt_agendamento":"24/09/2025","dt_treinamento":"24/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"250"},{"fornecedor":"Anjos da Guarda","status":"Treinado","dt_agendamento":"02/04/2026","dt_treinamento":"02/04/2026","app_instalado":"Sim","utilizando":"Não","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"60"},{"fornecedor":"Arcanjos Life","status":"Treinado","dt_agendamento":"02/04/2026","dt_treinamento":"02/04/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Sim","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"60"},{"fornecedor":"Ativa Serviços em Saúde LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Beauty Life Serviços Médicos e Life Remoções","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Bem Estar Remoções","status":"Treinado","dt_agendamento":"16/09/2025","dt_treinamento":"16/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"258"},{"fornecedor":"Bem me Care","status":"Agendado","dt_agendamento":"06/03/2026","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Blue Angels Emergências LTDA","status":"Treinado","dt_agendamento":"13/05/2026","dt_treinamento":"13/05/2026","app_instalado":"Não","utilizando":"Sim, WEB","motivo_nao_utilizacao":"Sem Dispositivo","tem_sistema":"Sim","qual_sistema":"Proprio","celular":"Não, somente pessoais","frota":"4","rastreador_gps":"Não","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Maio","ano_treinamento":"2026","dias_desde_treinamento":"12"},{"fornecedor":"C.A. P Serviços Médicos","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"CA Vittalis Remoção Homecare LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"CAIO AKIRA YASUI","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Cardiocenter Especialidades Médicas LTDA","status":"Treinado","dt_agendamento":"16/09/2025","dt_treinamento":"16/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"258"},{"fornecedor":"CEMAC - Centro Especialidades","status":"Treinado","dt_agendamento":"06/09/2025","dt_treinamento":"06/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"268"},{"fornecedor":"Cenemed Remoção","status":"Treinado","dt_agendamento":"","dt_treinamento":"","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"","tem_sistema":"Sim","qual_sistema":"IRIS","celular":"Sim","frota":"","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Clinerp Clínica de Vídeo Endosc e Reprod Humana LTDA","status":"Treinado","dt_agendamento":"27/04/2026","dt_treinamento":"27/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Sem Dispositivo","tem_sistema":"Não","qual_sistema":"","celular":"Não","frota":"5","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"Rota Exata","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"35"},{"fornecedor":"Clínica São Camilo LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Constat - Consultoria e Auditoria Médico Hospitalar  e Atendimento Domiciliar LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Cooperativa de Trabalho de Atendimento Pré e Hospitalar LTDA - COAPH","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Copacare - SERRA COLONIAL","status":"Treinado","dt_agendamento":"09/02/2026","dt_treinamento":"09/02/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Fevereiro","ano_treinamento":"2026","dias_desde_treinamento":"112"},{"fornecedor":"Costa e Costa serviços","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Cotreu  Serviços Médicos e Diagnostico LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Cuiabá Vita Home Care LTDA","status":"Treinado","dt_agendamento":"13/05/2026","dt_treinamento":"13/05/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Usa Outro Sistema","tem_sistema":"Sim","qual_sistema":"IRIS","celular":"Sim","frota":"26","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Maio","ano_treinamento":"2026","dias_desde_treinamento":"12"},{"fornecedor":"Cuidar e Saúde Apoio e Gestão EIRELI","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"CUIDE BEM SAÚDE EMERGÊNCIAS MÉDICAS LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"DIRLEN DA SILVA MASSA MASSA & CIA LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"DLR Remoções Médicas","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"DN Health Care Serviços Médicos LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"DPR Serviços de Saúde LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Dr Home - MAIS HOME LAB","status":"Treinado","dt_agendamento":"06/04/2026","dt_treinamento":"06/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Usa Outro Sistema","tem_sistema":"Sim","qual_sistema":"Ubr","celular":"Sim","frota":"18","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"56"},{"fornecedor":"Ederson Wilmer Garcia","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"EMERGENCIA 01","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Ennio Teixeira Marques - EPP","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"EXPRESS REMOÇÕES LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"F1","status":"Treinado","dt_agendamento":"16/04/2026","dt_treinamento":"16/04/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Sim","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"46"},{"fornecedor":"Fenix UTI Móvel LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Fragamed Emergências Médicas LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"GAMA REMOÇÕES","status":"Treinado","dt_agendamento":"16/04/2026","dt_treinamento":"16/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Em Instalação","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"46"},{"fornecedor":"Getap Med","status":"Treinado","dt_agendamento":"22/09/2025","dt_treinamento":"22/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"252"},{"fornecedor":"Giro Med Remoções em UTI Móvel LTDA","status":"Treinado","dt_agendamento":"27/04/2026","dt_treinamento":"27/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Em Instalação","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"2","rastreador_gps":"Não","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"35"},{"fornecedor":"GLOBAL EMERGENCIAS MEDICAS LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Globovida Emergências Médicas LTDA","status":"Treinado","dt_agendamento":"27/04/2026","dt_treinamento":"27/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Sem Dispositivo","tem_sistema":"Não","qual_sistema":"","celular":"Não","frota":"15","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"35"},{"fornecedor":"GR REMOÇÕES","status":"Treinado","dt_agendamento":"02/04/2026","dt_treinamento":"02/04/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"4","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"60"},{"fornecedor":"H MED","status":"Treinado","dt_agendamento":"23/09/2025","dt_treinamento":"23/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"251"},{"fornecedor":"Help Medic - D.M.G","status":"Treinado","dt_agendamento":"20/11/2025","dt_treinamento":"20/11/2025","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"iOS Incompatível","tem_sistema":"Não","qual_sistema":"","celular":"Não","frota":"","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Novembro","ano_treinamento":"2025","dias_desde_treinamento":"193"},{"fornecedor":"HH SAÚDE LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Hospital Imaculada Conceição","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Hospital Unimed - Pronto Atendimento POÇOS","status":"Treinado","dt_agendamento":"26/09/2025","dt_treinamento":"26/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"Sys4web","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"248"},{"fornecedor":"HOSPITALAR ENFERMAGEM DOMICILIAR LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"IDEAL EMERGENCIAS MEDICAS","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Inovar","status":"Treinado","dt_agendamento":"20/11/2025","dt_treinamento":"20/11/2025","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"iOS Incompatível","tem_sistema":"Não","qual_sistema":"","celular":"Não","frota":"","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Novembro","ano_treinamento":"2025","dias_desde_treinamento":"193"},{"fornecedor":"Integral Care LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Intensimed Home Care Transporte e Locação LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Intensiva","status":"Treinado","dt_agendamento":"","dt_treinamento":"","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"","tem_sistema":"Sim","qual_sistema":"IRIS","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Intermedilar Emergências Médicas LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Intervida Serviços de Ambulância LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"IPSEM Instituto de Pesquisa e Serviços Médicos LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"J J V de Almeida Serviços Médicos EIRELI","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"JF MED LTDA","status":"Treinado","dt_agendamento":"07/04/2026","dt_treinamento":"07/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Usa Outro Sistema","tem_sistema":"Sim","qual_sistema":"Proprio","celular":"Sim","frota":"12","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"55"},{"fornecedor":"JLC Efraim - Remoções LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"JM2 Serviços de Emergências Médicas LTDA - Vip Saúde","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"L & M Ambulância Ltda","status":"Treinado","dt_agendamento":"12/05/2026","dt_treinamento":"12/05/2026","app_instalado":"Não","utilizando":"Sim, WEB","motivo_nao_utilizacao":"Sem Dispositivo","tem_sistema":"Não","qual_sistema":"","celular":"Não, somente pessoais","frota":"1","rastreador_gps":"Não","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Maio","ano_treinamento":"2026","dias_desde_treinamento":"20"},{"fornecedor":"L.Evaristo dos Santos LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Laerte Ramos de Carvalho Moreira -LIFE MED","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Las Vida Remoções LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Le France","status":"Treinado","dt_agendamento":"30/09/2025","dt_treinamento":"30/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"244"},{"fornecedor":"Leste de Minas Serviços de Remoção LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Leve Saúde","status":"Treinado","dt_agendamento":"","dt_treinamento":"","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Recusa/Objeção","tem_sistema":"Não","qual_sistema":"","celular":"Não","frota":"","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Life Care Medicina LTDA","status":"Treinado","dt_agendamento":"27/04/2026","dt_treinamento":"27/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Em Instalação","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"3","rastreador_gps":"Não","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"35"},{"fornecedor":"LIFE CARE P DE S. DE SAÚDE - VIDA REMOÇÕES","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Life Corp do Brasil Emergências Médicas LTDA","status":"Treinado","dt_agendamento":"13/05/2026","dt_treinamento":"13/05/2026","app_instalado":"Não","utilizando":"Sim, WEB","motivo_nao_utilizacao":"Sem Dispositivo","tem_sistema":"Não","qual_sistema":"","celular":"Não, somente pessoais","frota":"12","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Maio","ano_treinamento":"2026","dias_desde_treinamento":"12"},{"fornecedor":"Life Remocenter","status":"Treinado","dt_agendamento":"17/04/2026","dt_treinamento":"17/04/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Sim","qual_sistema":"Proprio","celular":"Sim","frota":"14","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"45"},{"fornecedor":"LLM Serviços Médicos de Transporte LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"M&R Emergências Médicas LTDA","status":"Treinado","dt_agendamento":"17/04/2026","dt_treinamento":"17/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Em Instalação","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"45"},{"fornecedor":"M. P. P. Clínica Médica e Serviços de Remoção Sociedade Limitada","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Mais Saúde Atendimento Domiciliar LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Med Serviços de Ambulância LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Medcall Juiz de fora","status":"Treinado","dt_agendamento":"16/10/2025","dt_treinamento":"16/10/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Outubro","ano_treinamento":"2025","dias_desde_treinamento":"228"},{"fornecedor":"Medical Save","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Medical Save Locação de Ambulâncias LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Medicall Prestação de Serviços","status":"Treinado","dt_agendamento":"","dt_treinamento":"","app_instalado":"Sim","utilizando":"Não","motivo_nao_utilizacao":"Inativo","tem_sistema":"","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Medicar Emergências Médicas São Paulo LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Medicare Serviços LTDA","status":"Treinado","dt_agendamento":"23/04/2026","dt_treinamento":"23/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Usa Outro Sistema","tem_sistema":"Sim","qual_sistema":"IRIS","celular":"Sim","frota":"5","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"Public","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"39"},{"fornecedor":"Medshore Serviços em Saúde e Segurança LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Medsul","status":"Treinado","dt_agendamento":"10/09/2025","dt_treinamento":"10/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"264"},{"fornecedor":"Pronto Doctor Home Care","status":"Treinado","dt_agendamento":"22/05/2026","dt_treinamento":"22/05/2026","app_instalado":"Não","utilizando":"Sim, WEB","motivo_nao_utilizacao":"recusa/Objeção","tem_sistema":"Não","qual_sistema":"","celular":"Não, somente pessoais","frota":"3","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Medvida Emergências Médicas LTDA","status":"Treinado","dt_agendamento":"05/05/2026","dt_treinamento":"05/05/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Usa Outro Sistema","tem_sistema":"Sim","qual_sistema":"Proprio","celular":"Não","frota":"4","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Maio","ano_treinamento":"2026","dias_desde_treinamento":"27"},{"fornecedor":"Medvidas Serviços","status":"Treinado","dt_agendamento":"","dt_treinamento":"","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Usa Outro Sistema","tem_sistema":"Sim","qual_sistema":"TCI","celular":"Sim","frota":"","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Moraes Serviços em Saúde LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Núcleo Médico - Atende Noroeste De Minas","status":"Treinado","dt_agendamento":"09/04/2026","dt_treinamento":"09/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Usa Outro Sistema","tem_sistema":"Sim","qual_sistema":"IRIS","celular":"Sim","frota":"12","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"53"},{"fornecedor":"OESTE VIDA LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"OTTO E ROCHA SERVICOS MEDICOS HOSPITALARES LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Paramed Serviços Médicos LTDA EPP","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"PATRÍCIO ARAÚJO DA SILVA ME","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Phoenix Serviços Médicos LTDA","status":"Treinado","dt_agendamento":"10/04/2026","dt_treinamento":"10/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Usa Outro Sistema","tem_sistema":"Sim","qual_sistema":"IRIS","celular":"Sim","frota":"20","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"52"},{"fornecedor":"PLENO HOSPITAL","status":"Treinado","dt_agendamento":"13/04/2026","dt_treinamento":"13/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Em Instalação","tem_sistema":"Sim","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"49"},{"fornecedor":"Pontual G7","status":"Treinado","dt_agendamento":"17/09/2025","dt_treinamento":"17/09/2025","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Sem Dispositivo","tem_sistema":"Não","qual_sistema":"","celular":"Não","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"257"},{"fornecedor":"Promed Santa Ângela","status":"Treinado","dt_agendamento":"","dt_treinamento":"","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Usa Outro Sistema","tem_sistema":"Sim","qual_sistema":"TCI","celular":"Sim","frota":"","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"PULSAR","status":"Treinado","dt_agendamento":"06/04/2026","dt_treinamento":"06/04/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"56"},{"fornecedor":"R L do Nascimento Segundo","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"R R SERVIÇOS HOSPITALARES","status":"Treinado","dt_agendamento":"21/01/2026","dt_treinamento":"21/01/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Janeiro","ano_treinamento":"2026","dias_desde_treinamento":"131"},{"fornecedor":"R&E Remoção de Emergência LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Remoções Monlevade","status":"Treinado","dt_agendamento":"13/04/2026","dt_treinamento":"13/04/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"49"},{"fornecedor":"Remoções Resende","status":"Treinado","dt_agendamento":"10/04/2026","dt_treinamento":"10/04/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"52"},{"fornecedor":"Removida Emergencias Medicas -SGS","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Rio Verde Resgate Serviços Médicos e Remoção - RVR LTDA","status":"Treinado","dt_agendamento":"06/05/2026","dt_treinamento":"06/05/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"iOS Incompatível","tem_sistema":"Sim","qual_sistema":"TCI","celular":"Não","frota":"9","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Maio","ano_treinamento":"2026","dias_desde_treinamento":"26"},{"fornecedor":"RN Resgate Serviços e Comércio LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Salva-Vida S.O.S. - Emergências Médicas LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"SAME Soluções Médicas LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Saúde e Vida Remoções de Pacientes LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Saúde Móvel Remoções LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Serra Assistence LTDA","status":"Treinado","dt_agendamento":"04/04/2026","dt_treinamento":"04/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Usa Outro Sistema","tem_sistema":"Sim","qual_sistema":"Próprio","celular":"Não","frota":"6","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"58"},{"fornecedor":"SERVIÇOS MÉDICOS DE ATENDIMENTO A EMERGÊNCIA E REMOÇÕES LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"SEU","status":"Treinado","dt_agendamento":"","dt_treinamento":"","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Sem Dispositivo","tem_sistema":"Não","qual_sistema":"","celular":"Não","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"SOBREAVISO REMOCOES LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"SOS Lar Atendimento Médico e Remoções LTDA","status":"Treinado","dt_agendamento":"23/04/2026","dt_treinamento":"23/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Em Instalação","tem_sistema":"Sim","qual_sistema":"Proprio","celular":"Sim","frota":"12","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"39"},{"fornecedor":"SOS Remoções LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"SOS UBERVIDAS","status":"Treinado","dt_agendamento":"10/04/2026","dt_treinamento":"10/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Sem Dispositivo","tem_sistema":"Não","qual_sistema":"","celular":"Não","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"52"},{"fornecedor":"SP Vidas Emergências Médicas LTDA","status":"Treinado","dt_agendamento":"25/05/2026","dt_treinamento":"25/05/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Em Instalação","tem_sistema":"Sim","qual_sistema":"TCI","celular":"Sim","frota":"12","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Maio","ano_treinamento":"2026","dias_desde_treinamento":"7"},{"fornecedor":"Staff Serviços Médicos LTDA","status":"Treinado","dt_agendamento":"08/05/2026","dt_treinamento":"08/05/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"","tem_sistema":"Sim","qual_sistema":"Proprio","celular":"Sim","frota":"6","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Maio","ano_treinamento":"2026","dias_desde_treinamento":"24"},{"fornecedor":"TBT Serviços Médicos LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Terapia do Movimento","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Torre Emergências Médicas LTDA","status":"Treinado","dt_agendamento":"04/05/2026","dt_treinamento":"04/05/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Maio","ano_treinamento":"2026","dias_desde_treinamento":"28"},{"fornecedor":"Trans Medi","status":"Treinado","dt_agendamento":"19/09/2025","dt_treinamento":"19/09/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2026","dias_desde_treinamento":"-110"},{"fornecedor":"Transcordis","status":"Treinado","dt_agendamento":"12/01/2026","dt_treinamento":"12/01/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Janeiro","ano_treinamento":"2026","dias_desde_treinamento":"140"},{"fornecedor":"Translife.horus - Home Care Remoção/UTI em Saúde LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"transvida serviço em saúde","status":"Treinado","dt_agendamento":"25/01/2026","dt_treinamento":"25/01/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Janeiro","ano_treinamento":"2026","dias_desde_treinamento":"127"},{"fornecedor":"Udicor Gestão em Saúde","status":"Treinado","dt_agendamento":"19/09/2025","dt_treinamento":"19/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"255"},{"fornecedor":"Ultra Life Saúde LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Unimed Alfenas Cooperativa de Trabalho Médico","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Unimed Araxá Cooperativa de Trabalho Médico LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Unimed Centro Oeste","status":"Treinado","dt_agendamento":"15/12/2024","dt_treinamento":"15/12/2024","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Dezembro","ano_treinamento":"2024","dias_desde_treinamento":"533"},{"fornecedor":"Unimed Centro Sul Fluminense Cooperativa de Trabalho Médico","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Unimed Conselheiro Lafaiete Cooperativa de Trabalho Médico LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Unimed Curvelo Cooperativa de Trabalho Médico LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Unimed de Dracena Coop. De Trab. Médico","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Unimed de Mineiros Cooperativa de Trabalho Médico","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Unimed Ilhéus","status":"Treinado","dt_agendamento":"24/04/2026","dt_treinamento":"24/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Em Instalação","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"3","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"38"},{"fornecedor":"Unimed Inconfidentes","status":"Treinado","dt_agendamento":"18/10/2025","dt_treinamento":"18/10/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Outubro","ano_treinamento":"2025","dias_desde_treinamento":"226"},{"fornecedor":"Unimed Itabira Cooperativa de Trabalho Médico","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Unimed Itajubá Cooperativa de Trabalho Médico","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Unimed Ituiutaba Cooperativa do Trabalho Médico LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Unimed Juiz de Fora Cooperativa de Trabalho Médico LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Unimed Santo Antônio de Jesus Coo. de Trabalho Médico","status":"Agendado","dt_agendamento":"08/05/2026","dt_treinamento":"26/05/2026","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":"6"},{"fornecedor":"Unimed São Sebastião do Paraíso Cooperativa de Trabalho Médico LTDA","status":"Treinado","dt_agendamento":"13/05/2026","dt_treinamento":"13/05/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"1","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Maio","ano_treinamento":"2026","dias_desde_treinamento":"12"},{"fornecedor":"Unimed Sudoeste de Minas Cooperativa de Trabalho Médico","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Unimed Sul Mineira","status":"Treinado","dt_agendamento":"17/09/2025","dt_treinamento":"17/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"257"},{"fornecedor":"Unimed Teófilo Otoni Cooperativa de Trabalho Médico","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"UNIMED VOLTA REDONDA COOPERATIVA DE TRABALHO MÉDICO LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"UVM Maringa Urgências e Emergências EIRELI","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"V J Mendes Transportes LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"V P MENDES AMBULANCIA LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Vida Plus","status":"Treinado","dt_agendamento":"12/05/2026","dt_treinamento":"12/05/2026","app_instalado":"Não","utilizando":"Sim, WEB","motivo_nao_utilizacao":"Sem Dispositivo","tem_sistema":"Não","qual_sistema":"","celular":"Não","frota":"1","rastreador_gps":"Não","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Maio","ano_treinamento":"2026","dias_desde_treinamento":"20"},{"fornecedor":"Vale do Piranga Serviços em Saúde LTDA","status":"Treinado","dt_agendamento":"15/01/2026","dt_treinamento":"15/01/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Usa Outro Sistema","tem_sistema":"Sim","qual_sistema":"Ezra","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Janeiro","ano_treinamento":"2026","dias_desde_treinamento":"137"},{"fornecedor":"Valmed","status":"Treinado","dt_agendamento":"23/04/2026","dt_treinamento":"23/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Em Instalação","tem_sistema":"Sim","qual_sistema":"Proprio","celular":"Sim","frota":"5","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"39"},{"fornecedor":"VIDAS EMERGÊNCIAS MÉDICAS /UTI MÓVEL LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Vidas Serviços Hospitalares LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Vimedi Atividade Médica Móvel LTDA","status":"Treinado","dt_agendamento":"22/04/2026","dt_treinamento":"22/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Usa Outro Sistema","tem_sistema":"Sim","qual_sistema":"IRIS","celular":"Sim","frota":"14","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"40"},{"fornecedor":"Vital Mais","status":"Treinado","dt_agendamento":"03/09/2025","dt_treinamento":"03/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"271"},{"fornecedor":"Vitalle Remoções Médicas","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Viver Mais LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Voemed Serviços Médicos LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"W. Carvalho UTI Móvel LTDA ME","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Wmed","status":"Treinado","dt_agendamento":"12/09/2025","dt_treinamento":"12/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"262"},{"fornecedor":"ZELAR REMOÇOES DE PACIENTE","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""}];
+}
+
+// ===== STATE =====
+let currentFilter = 'todos';
+let currentSearch = '';
+let sortField = 'fornecedor';
+let sortAsc = true;
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('headerDate').textContent = new Date().toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
+  updateKPIs();
+  renderTable();
+  document.getElementById('searchInput').addEventListener('input', e => { currentSearch = e.target.value.toLowerCase(); renderTable(); });
+});
+
+function updateKPIs() {
+  const total = DATA.length;
+  const treinados = DATA.filter(r => r.status === 'Treinado').length;
+  const pendentes = DATA.filter(r => r.status === 'Pendente').length;
+  const agendados = DATA.filter(r => r.status === 'Agendado').length;
+  const pct = Math.round((treinados / total) * 100);
+
+  document.getElementById('kpiTotal').textContent = total;
+  document.getElementById('kpiTreinado').textContent = treinados;
+  document.getElementById('kpiTreinadoPct').textContent = pct + '% do total';
+  document.getElementById('kpiPendente').textContent = pendentes;
+  document.getElementById('kpiPendentePct').textContent = Math.round((pendentes/total)*100) + '% do total';
+  document.getElementById('kpiAgendado').textContent = agendados;
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.remove('active','orange','amber');
+  });
+  btn.classList.add('active');
+  if (filter === 'Pendente') btn.classList.add('orange');
+  if (filter === 'Agendado') btn.classList.add('amber');
+  renderTable();
+}
+
+function sortTable(field) {
+  if (sortField === field) { sortAsc = !sortAsc; }
+  else { sortField = field; sortAsc = true; }
+  document.querySelectorAll('th').forEach(th => th.classList.remove('sort-asc','sort-desc'));
+  const headers = {'fornecedor':0,'status':1,'dt_treinamento':2,'dt_agendamento':3};
+  const idx = headers[field];
+  if (idx !== undefined) {
+    const ths = document.querySelectorAll('thead th');
+    ths[idx].classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
+  }
+  renderTable();
+}
+
+function parseDate(s) {
+  if (!s) return null;
+  const [d,m,y] = s.split('/');
+  return new Date(+y, +m-1, +d);
+}
+
+function renderTable() {
+  let rows = [...DATA];
+
+  if (currentFilter !== 'todos') rows = rows.filter(r => r.status === currentFilter);
+  if (currentSearch) rows = rows.filter(r => r.fornecedor.toLowerCase().includes(currentSearch));
+
+  rows.sort((a,b) => {
+    let va = a[sortField] || '', vb = b[sortField] || '';
+    if (sortField.startsWith('dt_')) {
+      va = parseDate(va) || new Date(0);
+      vb = parseDate(vb) || new Date(0);
+      return sortAsc ? va - vb : vb - va;
+    }
+    return sortAsc ? va.localeCompare(vb, 'pt-BR') : vb.localeCompare(va, 'pt-BR');
+  });
+
+  document.getElementById('resultsCount').textContent = rows.length + ' fornecedor' + (rows.length !== 1 ? 'es' : '');
+
+  const tbody = document.getElementById('tableBody');
+  const empty = document.getElementById('emptyState');
+
+  if (!rows.length) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const checkYes = (v) => v && (v.toLowerCase().startsWith('sim') || v === 'S') ? `<span class="check-yes"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Sim</span>` : (v && v !== '' ? `<span class="check-no">${v.length > 14 ? v.substring(0,14)+'…' : v}</span>` : `<span class="check-no">—</span>`);
+
+  const utilizacaoBadge = (util, app, motivo) => {
+    const u = (util||'').toLowerCase();
+    const a = (app||'').toLowerCase();
+    const m = (motivo||'').trim();
+    if (u.includes('web')) return `<span class="badge-util web">WEB</span>`;
+    if (u.startsWith('sim') || a.startsWith('sim')) return `<span class="badge-util app">Usa APP</span>`;
+    if (u === 'não' || u === 'nao') return `<span class="badge-util nao">Não Usa</span>${m ? `<br><small class="motivo-tag">${escHtml(m)}</small>` : ''}`;
+    return `<span class="badge-util vazio">—</span>`;
+  };
+
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td class="td-fornecedor">${escHtml(r.fornecedor)}</td>
+      <td><span class="badge badge-${r.status.toLowerCase()}">${r.status}</span></td>
+      <td class="td-date ${!r.dt_treinamento ? 'empty' : ''}">${r.dt_treinamento || '—'}</td>
+      <td>${utilizacaoBadge(r.utilizando, r.app_instalado, r.motivo_nao_utilizacao)}</td>
+    </tr>
+  `).join('');
+}
+
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function exportCSV() {
+  let rows = [...DATA];
+  if (currentFilter !== 'todos') rows = rows.filter(r => r.status === currentFilter);
+  if (currentSearch) rows = rows.filter(r => r.fornecedor.toLowerCase().includes(currentSearch));
+  const headers = ['Fornecedor','Status','Dt Treinamento','Dt Agendamento','App Instalado','Utilizando','Motivo','Tem Sistema','Qual Sistema','Celular','Frota','Rastreador GPS','Dias desde Treinamento'];
+  const fields = ['fornecedor','status','dt_treinamento','dt_agendamento','app_instalado','utilizando','motivo_nao_utilizacao','tem_sistema','qual_sistema','celular','frota','rastreador_gps','dias_desde_treinamento'];
+  const csv = [headers.join(';'), ...rows.map(r => fields.map(f => `"${(r[f]||'').replace(/"/g,'""')}"`).join(';'))].join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'fornecedores_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+</script>
+</body>
+</html>

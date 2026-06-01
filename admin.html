@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Painel de Implantação</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #E8590C;
+    --orange-light: #F47735;
+    --orange-pale: #FFF0E8;
+    --green: #1A4731;
+    --green-mid: #226040;
+    --green-light: #2D7A52;
+    --green-pale: #E8F5EE;
+    --white: #FFFFFF;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-400: #9CA3AF;
+    --gray-500: #6B7280;
+    --gray-600: #4B5563;
+    --gray-800: #1F2937;
+    --red: #DC2626;
+    --red-pale: #FEF2F2;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,0.10);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-mid) 100%);
+    padding: 0;
+    box-shadow: 0 2px 20px rgba(26,71,49,0.3);
+  }
+
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+  }
+
+  .logo-area { display: flex; align-items: center; gap: 14px; }
+
+  .logo-mark {
+    width: 40px; height: 40px;
+    background: var(--orange);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .logo-mark svg { width: 22px; height: 22px; fill: white; }
+
+  .logo-text { display: flex; flex-direction: column; }
+  .logo-title { font-size: 15px; font-weight: 700; color: white; }
+  .logo-sub { font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.04em; }
+
+  .header-actions { display: flex; gap: 10px; align-items: center; }
+
+  .btn-header {
+    padding: 8px 18px;
+    border-radius: var(--radius-sm);
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-view {
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    color: white;
+  }
+  .btn-view:hover { background: rgba(255,255,255,0.25); }
+
+  /* LAYOUT */
+  .admin-layout {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 32px 60px;
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  /* SIDEBAR / PANELS */
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--gray-100);
+    background: var(--gray-50);
+  }
+
+  .card-header h2 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray-800);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-header h2 svg { width: 16px; height: 16px; stroke: var(--orange); }
+
+  .card-body { padding: 24px; }
+
+  /* IMPORT TABS */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid var(--gray-200);
+    margin-bottom: 20px;
+  }
+
+  .tab {
+    padding: 10px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-500);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+  .tab:hover:not(.active) { color: var(--gray-800); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* DROPZONE */
+  .dropzone {
+    border: 2px dashed var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 32px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .dropzone:hover, .dropzone.drag-over {
+    border-color: var(--green-light);
+    background: var(--green-pale);
+  }
+
+  .dropzone input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+
+  .dropzone-icon { font-size: 32px; margin-bottom: 10px; }
+  .dropzone p { font-size: 13px; color: var(--gray-600); font-weight: 500; }
+  .dropzone small { font-size: 11px; color: var(--gray-400); margin-top: 4px; display: block; }
+
+  /* JSON EDITOR */
+  textarea.json-area {
+    width: 100%;
+    min-height: 160px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: var(--gray-800);
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+    background: var(--gray-50);
+    line-height: 1.5;
+  }
+
+  textarea.json-area:focus { border-color: var(--green); background: white; }
+
+  /* FORM */
+  .form-row { margin-bottom: 14px; }
+  .form-row label { display: block; font-size: 11px; font-weight: 600; color: var(--gray-600); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  .form-row input, .form-row select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    color: var(--gray-800);
+    outline: none;
+    transition: border-color 0.2s;
+    background: var(--gray-50);
+  }
+
+  .form-row input:focus, .form-row select:focus { border-color: var(--green); background: white; }
+
+  .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* BUTTONS */
+  .btn {
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+  }
+
+  .btn svg { width: 15px; height: 15px; }
+
+  .btn-primary { background: var(--green); color: white; }
+  .btn-primary:hover { background: var(--green-mid); }
+
+  .btn-orange { background: var(--orange); color: white; }
+  .btn-orange:hover { background: var(--orange-light); }
+
+  .btn-outline { background: white; border: 1.5px solid var(--gray-200); color: var(--gray-600); }
+  .btn-outline:hover { border-color: var(--gray-400); }
+
+  .btn-danger { background: var(--red-pale); color: var(--red); border: 1.5px solid #FECACA; }
+  .btn-danger:hover { background: var(--red); color: white; }
+
+  .btn-sm { padding: 7px 12px; font-size: 11px; }
+
+  .btn-full { width: 100%; }
+
+  /* TABLE AREA */
+  .table-controls {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .table-controls input {
+    flex: 1;
+    min-width: 160px;
+    padding: 8px 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    color: var(--gray-800);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .table-controls input:focus { border-color: var(--green); }
+
+  .table-scroll { overflow-x: auto; max-height: 620px; overflow-y: auto; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+
+  thead { position: sticky; top: 0; z-index: 5; }
+
+  thead tr { background: var(--gray-50); border-bottom: 2px solid var(--gray-200); }
+
+  th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gray-600);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  tbody tr { border-bottom: 1px solid var(--gray-100); transition: background 0.15s; }
+  tbody tr:hover { background: var(--gray-50); }
+
+  td { padding: 10px 14px; vertical-align: middle; }
+
+  .td-nome { font-weight: 600; font-size: 12px; max-width: 240px; line-height: 1.3; }
+
+  .badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 100px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+  .badge-treinado { background: #E8F5EE; color: #166534; }
+  .badge-pendente { background: var(--orange-pale); color: #9A3412; }
+  .badge-agendado { background: #FEF3C7; color: #92400E; }
+
+  .action-btns { display: flex; gap: 6px; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 680px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(10px);
+    transition: transform 0.2s;
+  }
+
+  .modal-overlay.open .modal { transform: translateY(0); }
+
+  .modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-header h3 { font-size: 16px; font-weight: 700; }
+
+  .modal-close {
+    width: 32px; height: 32px;
+    background: var(--gray-100);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--gray-600);
+    transition: background 0.2s;
+  }
+
+  .modal-close:hover { background: var(--gray-200); }
+
+  .modal-body { padding: 24px; }
+
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--gray-100);
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  /* TOAST */
+  .toast-wrap {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 9999;
+  }
+
+  .toast {
+    padding: 12px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    box-shadow: var(--shadow-lg);
+    animation: slideIn 0.3s ease, fadeOutDelay 3s ease 0.2s forwards;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 220px;
+  }
+
+  .toast.success { background: var(--green-light); }
+  .toast.error { background: var(--red); }
+  .toast.info { background: #2563EB; }
+
+  @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  @keyframes fadeOutDelay { 0%,80% { opacity: 1; } 100% { opacity: 0; pointer-events: none; } }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .stat-item {
+    padding: 16px 20px;
+    text-align: center;
+    border-right: 1px solid var(--gray-100);
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-num { font-size: 24px; font-weight: 800; color: var(--green); }
+  .stat-num.orange { color: var(--orange); }
+  .stat-num.amber { color: #D97706; }
+  .stat-lbl { font-size: 11px; color: var(--gray-500); font-weight: 500; margin-top: 2px; }
+
+  /* ALERT */
+  .alert {
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    line-height: 1.5;
+  }
+
+  .alert-warning { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+  .alert-success { background: var(--green-pale); color: var(--green); border: 1px solid #A7F3D0; }
+  .alert-info { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+
+  @media (max-width: 1100px) {
+    .admin-layout { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .admin-layout { padding: 16px; }
+    .header-inner { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-title">Administração</span>
+        <span class="logo-sub">Gerenciamento de Dados</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="index.html" class="btn-header btn-view">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Ver Painel
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <div style="display:flex;flex-direction:column;gap:20px;">
+
+    <!-- IMPORT CARD -->
+    <div class="card">
+      <div class="card-header">
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Importar Dados
+        </h2>
+      </div>
+      <div class="card-body">
+        <div class="tabs">
+          <div class="tab active" onclick="switchTab('csv')">Planilha CSV</div>
+          <div class="tab" onclick="switchTab('json')">JSON Direto</div>
+          <div class="tab" onclick="switchTab('template')">Modelo</div>
+        </div>
+
+        <div class="tab-panel active" id="tab-csv">
+          <div class="alert alert-info">Formato esperado: separador <strong>ponto e vírgula (;)</strong>, codificação UTF-8 ou Latin-1. Colunas na mesma ordem da planilha original.</div>
+          <div class="dropzone" id="dropzone">
+            <input type="file" accept=".csv" id="csvInput" onchange="handleCSV(event)">
+            <div class="dropzone-icon">📂</div>
+            <p>Arraste o arquivo CSV aqui</p>
+            <small>ou clique para selecionar</small>
+          </div>
+          <div id="csvStatus" style="margin-top:12px;font-size:12px;color:var(--gray-500);"></div>
+        </div>
+
+        <div class="tab-panel" id="tab-json">
+          <div class="alert alert-info">Cole ou edite o JSON diretamente. Deve ser um array de objetos com as chaves padrão.</div>
+          <textarea class="json-area" id="jsonInput" placeholder='[{"fornecedor":"Nome","status":"Treinado",...}]'></textarea>
+          <div style="margin-top:12px;display:flex;gap:8px;">
+            <button class="btn btn-primary btn-full" onclick="importJSON()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Aplicar JSON
+            </button>
+            <button class="btn btn-outline" onclick="loadCurrentJSON()" title="Carregar dados atuais para editar">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-template">
+          <div class="alert alert-success">Baixe o modelo CSV para preencher offline e importar aqui.</div>
+          <div style="font-size:12px;color:var(--gray-600);margin-bottom:14px;line-height:1.6;">
+            <strong>Colunas obrigatórias:</strong><br>
+            Fornecedor, STATUS, dt_agendamento, dt_treinamento, APP_INSTALADO, UTILIZANDO, Motivo N utilização, Tem sistema, Qual sistema, Celular Disponível, Frota, Rastreador GPS, Telefone para contato
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <button class="btn btn-primary btn-full" onclick="downloadTemplate()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Baixar Modelo CSV
+            </button>
+            <button class="btn btn-outline btn-full" onclick="exportCurrentCSV()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Exportar Dados Atuais
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD QUICK CARD -->
+    <div class="card">
+      <div class="card-header">
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          Adicionar Fornecedor
+        </h2>
+      </div>
+      <div class="card-body">
+        <div class="form-row">
+          <label>Nome do Fornecedor *</label>
+          <input type="text" id="newNome" placeholder="Razão social completa">
+        </div>
+        <div class="form-row">
+          <label>Status *</label>
+          <select id="newStatus">
+            <option value="Pendente">Pendente</option>
+            <option value="Treinado">Treinado</option>
+            <option value="Agendado">Agendado</option>
+          </select>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-row">
+            <label>Data Agendamento</label>
+            <input type="date" id="newDtAgend">
+          </div>
+          <div class="form-row">
+            <label>Data Treinamento</label>
+            <input type="date" id="newDtTrein">
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-row">
+            <label>App Instalado</label>
+            <select id="newApp">
+              <option value="">—</option>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Utilizando</label>
+            <select id="newUtil">
+              <option value="">—</option>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+              <option value="Sim, WEB">Sim, WEB</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Telefone para Contato</label>
+          <input type="text" id="newTel" placeholder="(00) 00000-0000">
+        </div>
+        <div class="form-row">
+          <label>Frota (nº veículos)</label>
+          <input type="number" id="newFrota" placeholder="0" min="0">
+        </div>
+        <div class="form-grid-2">
+          <div class="form-row">
+            <label>Rastreador GPS</label>
+            <select id="newRastreador">
+              <option value="">—</option>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Celular Disponível</label>
+            <select id="newCelular">
+              <option value="">—</option>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Motivo Não Utilização</label>
+          <input type="text" id="newMotivo" placeholder="Ex: Em Instalação, Sem Dispositivo...">
+        </div>
+        <button class="btn btn-orange btn-full" onclick="addFornecedor()" style="margin-top:4px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar Fornecedor
+        </button>
+      </div>
+    </div>
+
+    <!-- DANGER ZONE -->
+    <div class="card">
+      <div class="card-header">
+        <h2 style="color:var(--red);">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--red)"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Zona de Perigo
+        </h2>
+      </div>
+      <div class="card-body">
+        <p style="font-size:12px;color:var(--gray-600);margin-bottom:14px;line-height:1.5;">Esta ação remove todos os dados personalizados e restaura a base original importada das planilhas.</p>
+        <button class="btn btn-danger btn-full" onclick="confirmReset()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+          Restaurar Dados Originais
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MAIN TABLE -->
+  <div class="card">
+    <div class="stats-bar" id="statsBar"></div>
+    <div class="card-header" style="border-top:1px solid var(--gray-100);">
+      <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Todos os Fornecedores
+      </h2>
+    </div>
+    <div class="table-controls">
+      <input type="text" id="adminSearch" placeholder="Filtrar por nome..." oninput="renderAdminTable()">
+      <select id="adminFilterStatus" onchange="renderAdminTable()" style="padding:8px 12px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);font-family:'Poppins',sans-serif;font-size:12px;outline:none;color:var(--gray-800);">
+        <option value="">Todos os status</option>
+        <option value="Treinado">Treinado</option>
+        <option value="Pendente">Pendente</option>
+        <option value="Agendado">Agendado</option>
+      </select>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Fornecedor</th>
+            <th>Status</th>
+            <th>Dt Treinamento</th>
+            <th>App</th>
+            <th>Utilizando</th>
+            <th>Frota</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="adminTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Editar Fornecedor</h3>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editIdx">
+      <div class="form-row">
+        <label>Nome do Fornecedor *</label>
+        <input type="text" id="editNome">
+      </div>
+      <div class="form-row">
+        <label>Status *</label>
+        <select id="editStatus">
+          <option value="Pendente">Pendente</option>
+          <option value="Treinado">Treinado</option>
+          <option value="Agendado">Agendado</option>
+        </select>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-row">
+          <label>Data Agendamento</label>
+          <input type="date" id="editDtAgend">
+        </div>
+        <div class="form-row">
+          <label>Data Treinamento</label>
+          <input type="date" id="editDtTrein">
+        </div>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-row">
+          <label>App Instalado</label>
+          <select id="editApp">
+            <option value="">—</option>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Utilizando</label>
+          <select id="editUtil">
+            <option value="">—</option>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+            <option value="Sim, WEB">Sim, WEB</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-row">
+          <label>Rastreador GPS</label>
+          <select id="editRastreador">
+            <option value="">—</option>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Celular Disponível</label>
+          <select id="editCelular">
+            <option value="">—</option>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-row">
+          <label>Frota</label>
+          <input type="number" id="editFrota" min="0">
+        </div>
+        <div class="form-row">
+          <label>Telefone</label>
+          <input type="text" id="editTel">
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Motivo Não Utilização</label>
+        <input type="text" id="editMotivo">
+      </div>
+      <div class="form-row">
+        <label>Tem Sistema Próprio</label>
+        <select id="editTemSistema">
+          <option value="">—</option>
+          <option value="Sim">Sim</option>
+          <option value="Não">Não</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Qual Sistema</label>
+        <input type="text" id="editQualSistema">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveEdit()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Salvar Alterações
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+// ===== BASE DATA (same as index.html) =====
+const BASE_DATA = [{"fornecedor":"3 G REMOÇOES COMERCIO E SERVIÇOS","status":"Treinado","dt_agendamento":"","dt_treinamento":"21/01/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Em Instalação","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Janeiro","ano_treinamento":"2026","dias_desde_treinamento":"131"},{"fornecedor":"A & G Serviços Médicos LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"A + Emergências Médicas EIRELI","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"A. Delgado Soluções LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"AC Transporte de Pacientes LTDA","status":"Treinado","dt_agendamento":"17/04/2026","dt_treinamento":"17/04/2026","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Em Instalação","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"45"},{"fornecedor":"Acura - Soluções em Saúde","status":"Treinado","dt_agendamento":"08/09/2025","dt_treinamento":"26/05/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"2","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Maio","ano_treinamento":"2026","dias_desde_treinamento":"6"},{"fornecedor":"Alicia Remoções","status":"Treinado","dt_agendamento":"16/04/2026","dt_treinamento":"16/04/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"46"},{"fornecedor":"AMAZON RESGATE","status":"Treinado","dt_agendamento":"23/04/2026","dt_treinamento":"23/04/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"9","rastreador_gps":"Sim","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"39"},{"fornecedor":"Ambulância Saúde -  VJ MENDES","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"AMC - Advanced Medical Care Serviços em Saúde LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"AME EMERGENCIAS MEDICAS LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"America Remoçoes","status":"Treinado","dt_agendamento":"22/10/2025","dt_treinamento":"22/10/2025","app_instalado":"Não","utilizando":"Não","motivo_nao_utilizacao":"Sem Dispositivo","tem_sistema":"Não","qual_sistema":"","celular":"Não","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Outubro","ano_treinamento":"2025","dias_desde_treinamento":"222"},{"fornecedor":"Amo Vida","status":"Treinado","dt_agendamento":"12/11/2025","dt_treinamento":"12/11/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Novembro","ano_treinamento":"2025","dias_desde_treinamento":"201"},{"fornecedor":"Anilmed","status":"Treinado","dt_agendamento":"24/09/2025","dt_treinamento":"24/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"250"},{"fornecedor":"Anjos da Guarda","status":"Treinado","dt_agendamento":"02/04/2026","dt_treinamento":"02/04/2026","app_instalado":"Sim","utilizando":"Não","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"60"},{"fornecedor":"Arcanjos Life","status":"Treinado","dt_agendamento":"02/04/2026","dt_treinamento":"02/04/2026","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Sim","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Abril","ano_treinamento":"2026","dias_desde_treinamento":"60"},{"fornecedor":"Ativa Serviços em Saúde LTDA","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Beauty Life Serviços Médicos e Life Remoções","status":"Pendente","dt_agendamento":"","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Bem Estar Remoções","status":"Treinado","dt_agendamento":"16/09/2025","dt_treinamento":"16/09/2025","app_instalado":"Sim","utilizando":"Sim","motivo_nao_utilizacao":"","tem_sistema":"Não","qual_sistema":"","celular":"Sim","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Setembro","ano_treinamento":"2025","dias_desde_treinamento":"258"},{"fornecedor":"Bem me Care","status":"Agendado","dt_agendamento":"06/03/2026","dt_treinamento":"","app_instalado":"","utilizando":"","motivo_nao_utilizacao":"","tem_sistema":"","qual_sistema":"","celular":"","frota":"","rastreador_gps":"","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"","ano_treinamento":"","dias_desde_treinamento":""},{"fornecedor":"Blue Angels Emergências LTDA","status":"Treinado","dt_agendamento":"13/05/2026","dt_treinamento":"13/05/2026","app_instalado":"Não","utilizando":"Sim, WEB","motivo_nao_utilizacao":"Sem Dispositivo","tem_sistema":"Sim","qual_sistema":"Proprio","celular":"Não, somente pessoais","frota":"4","rastreador_gps":"Não","data_inicio_utilizacao":"","empresa_rastreador":"","telefone":"","mes_treinamento":"Maio","ano_treinamento":"2026","dias_desde_treinamento":"12"}];
+
+let DATA = JSON.parse(localStorage.getItem('fornecedores_data') || 'null') || [...BASE_DATA];
+
+// ===== HELPERS =====
+function saveData() {
+  localStorage.setItem('fornecedores_data', JSON.stringify(DATA));
+}
+
+function toast(msg, type='success') {
+  const w = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${type==='success'?'<polyline points="20 6 9 17 4 12"/>':type==='error'?'<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>':'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'}</svg>${msg}`;
+  w.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+function fmtDateToInput(s) {
+  if (!s) return '';
+  const [d,m,y] = s.split('/');
+  if (!d||!m||!y) return '';
+  return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
+}
+
+function fmtInputToDate(s) {
+  if (!s) return '';
+  const [y,m,d] = s.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ===== STATS =====
+function updateStats() {
+  const total = DATA.length;
+  const treinados = DATA.filter(r=>r.status==='Treinado').length;
+  const pendentes = DATA.filter(r=>r.status==='Pendente').length;
+  const agendados = DATA.filter(r=>r.status==='Agendado').length;
+  document.getElementById('statsBar').innerHTML = `
+    <div class="stat-item"><div class="stat-num">${total}</div><div class="stat-lbl">Total</div></div>
+    <div class="stat-item"><div class="stat-num">${treinados}</div><div class="stat-lbl">Treinados</div></div>
+    <div class="stat-item"><div class="stat-num orange">${pendentes}</div><div class="stat-lbl">Pendentes</div></div>
+  `;
+}
+
+// ===== TABLE =====
+function renderAdminTable() {
+  const search = (document.getElementById('adminSearch').value||'').toLowerCase();
+  const filterStatus = document.getElementById('adminFilterStatus').value;
+  const tbody = document.getElementById('adminTableBody');
+
+  let rows = DATA.map((r,i) => ({...r, _idx: i}));
+  if (search) rows = rows.filter(r => r.fornecedor.toLowerCase().includes(search));
+  if (filterStatus) rows = rows.filter(r => r.status === filterStatus);
+
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--gray-400);font-size:12px;font-weight:500;">Nenhum resultado.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows.map((r,n) => `
+    <tr>
+      <td style="color:var(--gray-400);font-size:11px;">${r._idx + 1}</td>
+      <td class="td-nome">${escHtml(r.fornecedor)}</td>
+      <td><span class="badge badge-${r.status.toLowerCase()}">${r.status}</span></td>
+      <td style="font-size:11px;color:var(--gray-600);">${r.dt_treinamento||'—'}</td>
+      <td style="font-size:11px;">${r.app_instalado||'—'}</td>
+      <td style="font-size:11px;">${r.utilizando||'—'}</td>
+      <td style="font-size:11px;">${r.frota ? r.frota+' veíc.' : '—'}</td>
+      <td>
+        <div class="action-btns">
+          <button class="btn btn-outline btn-sm" onclick="openEdit(${r._idx})" title="Editar">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="deleteFornecedor(${r._idx})" title="Excluir">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ===== ADD =====
+function addFornecedor() {
+  const nome = document.getElementById('newNome').value.trim();
+  if (!nome) { toast('Informe o nome do fornecedor', 'error'); return; }
+  const rec = {
+    fornecedor: nome,
+    status: document.getElementById('newStatus').value,
+    dt_agendamento: fmtInputToDate(document.getElementById('newDtAgend').value),
+    dt_treinamento: fmtInputToDate(document.getElementById('newDtTrein').value),
+    app_instalado: document.getElementById('newApp').value,
+    utilizando: document.getElementById('newUtil').value,
+    motivo_nao_utilizacao: document.getElementById('newMotivo').value,
+    tem_sistema: '', qual_sistema: '',
+    celular: document.getElementById('newCelular').value,
+    frota: document.getElementById('newFrota').value,
+    rastreador_gps: document.getElementById('newRastreador').value,
+    data_inicio_utilizacao: '', empresa_rastreador: '',
+    telefone: document.getElementById('newTel').value,
+    mes_treinamento: '', ano_treinamento: '', dias_desde_treinamento: ''
+  };
+  DATA.push(rec);
+  saveData();
+  updateStats();
+  renderAdminTable();
+  // Reset
+  ['newNome','newDtAgend','newDtTrein','newTel','newFrota','newMotivo'].forEach(id => document.getElementById(id).value = '');
+  ['newStatus','newApp','newUtil','newRastreador','newCelular'].forEach(id => document.getElementById(id).selectedIndex = 0);
+  toast(`"${nome}" adicionado com sucesso`);
+}
+
+// ===== DELETE =====
+function deleteFornecedor(idx) {
+  if (!confirm(`Excluir "${DATA[idx].fornecedor}"?`)) return;
+  DATA.splice(idx, 1);
+  saveData();
+  updateStats();
+  renderAdminTable();
+  toast('Fornecedor excluído', 'info');
+}
+
+// ===== EDIT MODAL =====
+function openEdit(idx) {
+  const r = DATA[idx];
+  document.getElementById('editIdx').value = idx;
+  document.getElementById('editNome').value = r.fornecedor || '';
+  document.getElementById('editStatus').value = r.status || 'Pendente';
+  document.getElementById('editDtAgend').value = fmtDateToInput(r.dt_agendamento);
+  document.getElementById('editDtTrein').value = fmtDateToInput(r.dt_treinamento);
+  document.getElementById('editApp').value = r.app_instalado || '';
+  document.getElementById('editUtil').value = r.utilizando || '';
+  document.getElementById('editRastreador').value = r.rastreador_gps || '';
+  document.getElementById('editCelular').value = r.celular || '';
+  document.getElementById('editFrota').value = r.frota || '';
+  document.getElementById('editTel').value = r.telefone || '';
+  document.getElementById('editMotivo').value = r.motivo_nao_utilizacao || '';
+  document.getElementById('editTemSistema').value = r.tem_sistema || '';
+  document.getElementById('editQualSistema').value = r.qual_sistema || '';
+  document.getElementById('editModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('editModal').classList.remove('open');
+}
+
+function saveEdit() {
+  const idx = +document.getElementById('editIdx').value;
+  const nome = document.getElementById('editNome').value.trim();
+  if (!nome) { toast('Informe o nome', 'error'); return; }
+  DATA[idx] = {
+    ...DATA[idx],
+    fornecedor: nome,
+    status: document.getElementById('editStatus').value,
+    dt_agendamento: fmtInputToDate(document.getElementById('editDtAgend').value),
+    dt_treinamento: fmtInputToDate(document.getElementById('editDtTrein').value),
+    app_instalado: document.getElementById('editApp').value,
+    utilizando: document.getElementById('editUtil').value,
+    rastreador_gps: document.getElementById('editRastreador').value,
+    celular: document.getElementById('editCelular').value,
+    frota: document.getElementById('editFrota').value,
+    telefone: document.getElementById('editTel').value,
+    motivo_nao_utilizacao: document.getElementById('editMotivo').value,
+    tem_sistema: document.getElementById('editTemSistema').value,
+    qual_sistema: document.getElementById('editQualSistema').value,
+  };
+  saveData();
+  updateStats();
+  renderAdminTable();
+  closeModal();
+  toast(`"${nome}" atualizado`);
+}
+
+// ===== TABS =====
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  const tabs = ['csv','json','template'];
+  document.querySelectorAll('.tab')[tabs.indexOf(name)].classList.add('active');
+}
+
+// ===== CSV IMPORT =====
+function handleCSV(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const text = e.target.result;
+      const parsed = parseCSV(text);
+      if (!parsed || !parsed.length) { toast('CSV vazio ou inválido', 'error'); return; }
+      DATA = parsed;
+      saveData();
+      updateStats();
+      renderAdminTable();
+      document.getElementById('csvStatus').innerHTML = `<span style="color:var(--green);font-weight:600;">${parsed.length} registros importados com sucesso.</span>`;
+      toast(`${parsed.length} registros importados`);
+    } catch(err) {
+      toast('Erro ao processar CSV: ' + err.message, 'error');
+    }
+  };
+  // Try UTF-8 first, then Latin-1
+  reader.readAsText(file, 'UTF-8');
+}
+
+function parseCSV(text) {
+  // Detect separator
+  const sep = text.split('\n')[0].includes(';') ? ';' : ',';
+  const lines = text.replace(/\r/g,'').split('\n').filter(l => l.trim());
+  if (lines.length < 2) return [];
+  const headers = lines[0].split(sep).map(h => h.trim().replace(/"/g,''));
+
+  const fieldMap = {
+    'Fornecedor': 'fornecedor', 'FORNECEDOR': 'fornecedor',
+    'STATUS': 'status', 'Status': 'status',
+    'dt_agendamento': 'dt_agendamento',
+    'dt_treinamento': 'dt_treinamento',
+    'APP_INSTALADO': 'app_instalado', 'App Instalado': 'app_instalado',
+    'UTILIZANDO': 'utilizando', 'Utilizando': 'utilizando',
+    'Motivo N utilização': 'motivo_nao_utilizacao', 'Motivo': 'motivo_nao_utilizacao',
+    'Tem sistema': 'tem_sistema',
+    'Qual sistema': 'qual_sistema',
+    'Celular Disponível': 'celular', 'Celular Android/IOS': 'celular', 'Celular': 'celular',
+    'Frota': 'frota',
+    'Rastreador GPS': 'rastreador_gps',
+    'Data início utilização': 'data_inicio_utilizacao',
+    'Empresa Rastreador': 'empresa_rastreador',
+    'Telefone para contato': 'telefone', 'Telefone': 'telefone',
+    'Mês Treinamento': 'mes_treinamento',
+    'Ano Treinamento': 'ano_treinamento',
+    'Dias desde Treinamento': 'dias_desde_treinamento',
+  };
+
+  const mappedHeaders = headers.map(h => fieldMap[h] || h.toLowerCase().replace(/ /g,'_'));
+
+  return lines.slice(1).map(line => {
+    const vals = line.split(sep).map(v => v.trim().replace(/^"|"$/g,''));
+    const rec = { fornecedor:'', status:'Pendente', dt_agendamento:'', dt_treinamento:'',
+                  app_instalado:'', utilizando:'', motivo_nao_utilizacao:'', tem_sistema:'',
+                  qual_sistema:'', celular:'', frota:'', rastreador_gps:'', data_inicio_utilizacao:'',
+                  empresa_rastreador:'', telefone:'', mes_treinamento:'', ano_treinamento:'', dias_desde_treinamento:'' };
+    mappedHeaders.forEach((k, i) => { if (k && vals[i] !== undefined) rec[k] = vals[i]; });
+    if (!rec.status) rec.status = 'Pendente';
+    return rec;
+  }).filter(r => r.fornecedor && r.fornecedor !== 'Fornecedor');
+}
+
+// ===== JSON IMPORT =====
+function importJSON() {
+  try {
+    const raw = document.getElementById('jsonInput').value.trim();
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) throw new Error('Deve ser um array JSON');
+    if (!parsed.length) throw new Error('Array vazio');
+    DATA = parsed;
+    saveData();
+    updateStats();
+    renderAdminTable();
+    toast(`${parsed.length} registros importados via JSON`);
+  } catch(e) {
+    toast('JSON inválido: ' + e.message, 'error');
+  }
+}
+
+function loadCurrentJSON() {
+  document.getElementById('jsonInput').value = JSON.stringify(DATA, null, 2);
+  toast('JSON atual carregado no editor', 'info');
+}
+
+// ===== EXPORT =====
+function exportCurrentCSV() {
+  const headers = ['Fornecedor','STATUS','dt_agendamento','dt_treinamento','APP_INSTALADO','UTILIZANDO','Motivo N utilização','Tem sistema','Qual sistema','Celular Disponível','Frota','Rastreador GPS','Data início utilização','Empresa Rastreador','Telefone para contato','Mês Treinamento','Ano Treinamento','Dias desde Treinamento'];
+  const fields = ['fornecedor','status','dt_agendamento','dt_treinamento','app_instalado','utilizando','motivo_nao_utilizacao','tem_sistema','qual_sistema','celular','frota','rastreador_gps','data_inicio_utilizacao','empresa_rastreador','telefone','mes_treinamento','ano_treinamento','dias_desde_treinamento'];
+  const csv = [headers.join(';'), ...DATA.map(r => fields.map(f => `"${(r[f]||'').replace(/"/g,'""')}"`).join(';'))].join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'fornecedores_export_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  toast('CSV exportado com sucesso');
+}
+
+function downloadTemplate() {
+  const headers = 'Fornecedor;STATUS;dt_agendamento;dt_treinamento;APP_INSTALADO;UTILIZANDO;Motivo N utilização;Tem sistema;Qual sistema;Celular Disponível;Frota;Rastreador GPS;Data início utilização;Empresa Rastreador;Telefone para contato';
+  const example = '"Exemplo Ambulância LTDA";"Pendente";"01/06/2026";"";"";"";"";"";"";"Sim";"4";"Sim";"";"";"(11) 99999-0000"';
+  const csv = [headers, example].join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'modelo_importacao.csv';
+  a.click();
+  toast('Modelo baixado');
+}
+
+// ===== RESET =====
+function confirmReset() {
+  if (!confirm('Isso restaurará os dados originais das planilhas e apagará todas as alterações feitas aqui. Continuar?')) return;
+  localStorage.removeItem('fornecedores_data');
+  DATA = [...BASE_DATA];
+  saveData();
+  updateStats();
+  renderAdminTable();
+  toast('Dados restaurados para a versão original', 'info');
+}
+
+// ===== CLOSE MODAL ON OVERLAY CLICK =====
+document.getElementById('editModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ===== DRAG & DROP CSV =====
+const dz = document.getElementById('dropzone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+dz.addEventListener('drop', e => {
+  e.preventDefault();
+  dz.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.name.endsWith('.csv')) {
+    const fakeEvt = { target: { files: [file] } };
+    handleCSV(fakeEvt);
+  }
+});
+
+// ===== INIT =====
+updateStats();
+renderAdminTable();
+</script>
+</body>
+</html>
