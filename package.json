@@ -1,0 +1,19 @@
+{
+  "name": "base-fornecedores",
+  "version": "1.0.0",
+  "description": "Sistema estático (HTML + CSS + JS puro, sem build e sem banco) para acompanhar treinamento e adoção do app IRIS pelos fornecedores de remoção.",
+  "main": "index.js",
+  "scripts": {
+    "seed:supabase": "node scripts/seed-supabase.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@supabase/server": "^1.4.1"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}
